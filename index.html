@@ -14,160 +14,142 @@
 }
 
 body {
-    background: #080808;
+    background: #101014;
     color: white;
     font-family: Arial, sans-serif;
     min-height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
-/* PARTICLES */
+/* PARTICLE BACKGROUND */
 #particles {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 }
 
-/* MAIN TITLE */
-.center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.center h1 {
-    color: #ff7900;
-    font-size: clamp(35px, 7vw, 75px);
-    text-align: center;
-    text-shadow: 0 0 25px #ff790077;
-}
-
-/* GAMES BUTTON */
+/* TOP BAR */
 .topbar {
     position: absolute;
     top: 20px;
     right: 25px;
-    z-index: 3;
+    z-index: 5;
 }
 
 .games-button {
-    background: #ff7900;
-    border: none;
-    border-radius: 9px;
-    padding: 13px 25px;
+    background: #ff8800;
     color: white;
+    border: none;
+    padding: 13px 27px;
     font-size: 17px;
     font-weight: bold;
+    border-radius: 9px;
     cursor: pointer;
     transition: 0.2s;
 }
 
 .games-button:hover {
-    background: #ff9a36;
+    background: #ffab35;
     transform: scale(1.06);
 }
 
-/* POPUP BACKGROUND */
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 5;
-    background: #000000bb;
+/* MAIN TITLE */
+.main {
+    height: 100vh;
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px;
+    text-align: center;
+    padding: 20px;
 }
 
-.modal.active {
-    display: flex;
+.main h1 {
+    color: #ff8800;
+    font-size: clamp(35px, 7vw, 75px);
+    text-shadow: 0 0 20px rgba(255,136,0,0.4);
 }
 
-/* GAMES WINDOW */
+/* GAMES POPUP */
 .games-window {
-    width: 100%;
-    max-width: 850px;
+    display: none;
+    position: fixed;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1000px;
     height: 80vh;
-    max-height: 700px;
-    background: #151515;
-    border: 1px solid #383838;
-    border-radius: 16px;
+    max-height: 750px;
+    background: #1c1c24;
+    border: 2px solid #ff8800;
+    border-radius: 15px;
     padding: 25px;
-    box-shadow: 0 0 40px #000;
-    animation: popup 0.25s ease;
+    box-shadow: 0 0 40px rgba(255,136,0,0.2);
+    overflow-y: auto;
 }
 
-@keyframes popup {
-    from {
-        transform: scale(0.9);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
+.games-window.active {
+    display: block;
 }
 
-/* WINDOW HEADER */
+/* POPUP HEADER */
 .window-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 .window-header h2 {
-    color: #ff7900;
-    font-size: 27px;
+    color: #ff8800;
+    font-size: 28px;
 }
 
 .close-button {
-    background: transparent;
+    background: #ff4444;
     color: white;
     border: none;
-    font-size: 32px;
+    width: 38px;
+    height: 38px;
+    font-size: 23px;
+    border-radius: 8px;
     cursor: pointer;
 }
 
 .close-button:hover {
-    color: #ff7900;
+    background: #ff2222;
 }
 
-/* SEARCH */
-.search {
+/* SEARCH BAR */
+.search-bar {
     width: 100%;
     padding: 14px;
-    border-radius: 9px;
-    background: #252525;
+    background: #292933;
     border: 1px solid #444;
+    border-radius: 9px;
     color: white;
-    outline: none;
     font-size: 16px;
-    margin-bottom: 22px;
+    outline: none;
+    margin-bottom: 25px;
 }
 
-.search:focus {
-    border-color: #ff7900;
+.search-bar:focus {
+    border-color: #ff8800;
 }
 
 /* GAME GRID */
-.game-list {
+.games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-    gap: 18px;
-    overflow-y: auto;
-    max-height: calc(100% - 110px);
-    padding: 3px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
 }
 
 /* GAME CARDS */
 .game-card {
-    background: #222;
-    border: 1px solid #363636;
+    background: #292933;
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
@@ -175,50 +157,52 @@ body {
 }
 
 .game-card:hover {
-    transform: translateY(-5px);
-    border-color: #ff7900;
-    box-shadow: 0 5px 20px #ff790022;
+    transform: translateY(-6px);
+    box-shadow: 0 5px 20px rgba(255,136,0,0.25);
 }
 
 .game-card img {
     width: 100%;
-    height: 120px;
+    height: 130px;
     object-fit: cover;
     display: block;
-    background: #333;
 }
 
-.game-info {
+.game-card h3 {
+    text-align: center;
     padding: 13px;
-}
-
-.game-info h3 {
     font-size: 16px;
-    margin-bottom: 6px;
-}
-
-.game-info p {
-    color: #999;
-    font-size: 12px;
 }
 
 .no-games {
+    color: #aaa;
     text-align: center;
-    color: #999;
-    padding: 30px;
     grid-column: 1 / -1;
+    padding: 30px;
 }
 
-/* MOBILE */
+/* DARK OVERLAY */
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 8;
+}
+
+.overlay.active {
+    display: block;
+}
+
 @media(max-width: 500px) {
     .games-window {
-        padding: 17px;
-        height: 85vh;
+        width: 95%;
+        padding: 15px;
     }
 
-    .game-list {
+    .games-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        gap: 12px;
     }
 
     .game-card img {
@@ -240,68 +224,70 @@ body {
 </div>
 
 <!-- CENTER TITLE -->
-<div class="center">
+<div class="main">
     <h1>Rody Horse Games</h1>
 </div>
 
-<!-- GAMES POPUP -->
-<div class="modal" id="gamesModal">
+<!-- DARK OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeGames()"></div>
 
-    <div class="games-window">
+<!-- GAMES WINDOW -->
+<div class="games-window" id="gamesWindow">
 
-        <div class="window-header">
-            <h2>🎮 Games Library</h2>
-
-            <button class="close-button" onclick="closeGames()">
-                ×
-            </button>
-        </div>
-
-        <input
-            type="text"
-            class="search"
-            id="searchBar"
-            placeholder="🔍 Search for games..."
-            oninput="searchGames()"
-        >
-
-        <div class="game-list" id="gameList"></div>
-
+    <div class="window-header">
+        <h2>🎮 Games</h2>
+        <button class="close-button" onclick="closeGames()">×</button>
     </div>
+
+    <input
+        type="text"
+        class="search-bar"
+        id="searchInput"
+        placeholder="🔍 Search for games..."
+        oninput="searchGames()"
+    >
+
+    <div class="games-grid" id="gamesGrid"></div>
+
 </div>
 
 <script>
 
-// ===========================================
-// ADD YOUR GAMES HERE!
-// ===========================================
+/* =================================
+   ADD YOUR GAMES HERE!
+   =================================
+
+   Copy a game object and change:
+   name  = Game name
+   image = Image URL
+   url   = Game website URL
+
+   Add a comma between games!
+*/
 
 const games = [
 
     {
         name: "Slope",
         image: "https://rodyhorsegames.vercel.app/images/slope.png",
-        url: "https://rodyhorsesgames.vercel.app/games/slope/index.html"
-    },
+        url: "https://rodyhorsegames.vercel.app/games/slope/index.html"
 
+];
 
-// ===========================================
-// DISPLAY GAMES
-// ===========================================
+/* DISPLAY GAMES */
 
-function displayGames(gameArray) {
+function displayGames(list) {
 
-    const list = document.getElementById("gameList");
+    const grid = document.getElementById("gamesGrid");
 
-    list.innerHTML = "";
+    grid.innerHTML = "";
 
-    if (gameArray.length === 0) {
-        list.innerHTML =
-            '<div class="no-games">No games found!</div>';
+    if (list.length === 0) {
+        grid.innerHTML = '<div class="no-games">No games found!</div>';
         return;
     }
 
-    gameArray.forEach(game => {
+    list.forEach(game => {
 
         const card = document.createElement("div");
         card.className = "game-card";
@@ -311,100 +297,77 @@ function displayGames(gameArray) {
         img.alt = game.name;
         img.loading = "lazy";
 
-        img.onerror = () => {
-            img.src = "https://placehold.co/400x250/222222/ffffff?text=Game";
-        };
-
-        const info = document.createElement("div");
-        info.className = "game-info";
-
         const title = document.createElement("h3");
         title.textContent = game.name;
 
-        const description = document.createElement("p");
-        description.textContent = game.description;
-
-        info.appendChild(title);
-        info.appendChild(description);
-
         card.appendChild(img);
-        card.appendChild(info);
+        card.appendChild(title);
 
         card.onclick = () => {
-            if (game.url && game.url !== "#") {
-                window.open(game.url, "_blank");
-            }
+            window.open(game.url, "_blank");
         };
 
-        list.appendChild(card);
+        grid.appendChild(card);
 
     });
 }
 
-// ===========================================
-// OPEN AND CLOSE WINDOW
-// ===========================================
+/* SEARCH GAMES */
+
+function searchGames() {
+
+    const search = document
+        .getElementById("searchInput")
+        .value.toLowerCase();
+
+    const filtered = games.filter(game =>
+        game.name.toLowerCase().includes(search)
+    );
+
+    displayGames(filtered);
+}
+
+/* OPEN WINDOW */
 
 function openGames() {
 
-    document.getElementById("gamesModal")
+    document.getElementById("gamesWindow")
+        .classList.add("active");
+
+    document.getElementById("overlay")
         .classList.add("active");
 
     displayGames(games);
-
-    document.getElementById("searchBar").value = "";
-
-    document.getElementById("searchBar").focus();
 }
+
+/* CLOSE WINDOW */
 
 function closeGames() {
 
-    document.getElementById("gamesModal")
+    document.getElementById("gamesWindow")
+        .classList.remove("active");
+
+    document.getElementById("overlay")
         .classList.remove("active");
 
 }
 
-// Close when clicking outside the window
-document.getElementById("gamesModal")
-.addEventListener("click", function(e) {
+/* ESCAPE KEY CLOSES WINDOW */
 
-    if (e.target === this) {
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
         closeGames();
     }
-
 });
 
-// Close with Escape
-document.addEventListener("keydown", function(e) {
+/* INITIALIZE */
 
-    if (e.key === "Escape") {
-        closeGames();
-    }
+displayGames(games);
 
-});
 
-// ===========================================
-// SEARCH GAMES
-// ===========================================
-
-function searchGames() {
-
-    const query = document
-        .getElementById("searchBar")
-        .value.toLowerCase();
-
-    const filteredGames = games.filter(game =>
-        game.name.toLowerCase().includes(query) ||
-        game.description.toLowerCase().includes(query)
-    );
-
-    displayGames(filteredGames);
-
-}
-
-// ===========================================
-// ANIMATED ORANGE PARTICLES
-// ===========================================
+/* =================================
+   ANIMATED PARTICLE BACKGROUND
+   ================================= */
 
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
@@ -412,33 +375,23 @@ const ctx = canvas.getContext("2d");
 let particles = [];
 
 function resizeCanvas() {
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    createParticles();
 }
-
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
 
 class Particle {
 
     constructor() {
-
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-
-        this.size = Math.random() * 2.5 + 1;
-
-        this.speedX = (Math.random() - 0.5) * 0.7;
-        this.speedY = (Math.random() - 0.5) * 0.7;
-
-        this.opacity = Math.random() * 0.6 + 0.2;
-
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.6;
+        this.speedY = (Math.random() - 0.5) * 0.6;
     }
 
     update() {
-
         this.x += this.speedX;
         this.y += this.speedY;
 
@@ -449,33 +402,19 @@ class Particle {
         if (this.y < 0 || this.y > canvas.height) {
             this.speedY *= -1;
         }
-
     }
 
     draw() {
+        ctx.fillStyle = "#ff8800";
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "#ff8800";
 
         ctx.beginPath();
-
-        ctx.arc(
-            this.x,
-            this.y,
-            this.size,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fillStyle =
-            `rgba(255, 121, 0, ${this.opacity})`;
-
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = "#ff7900";
-
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.shadowBlur = 0;
-
     }
-
 }
 
 function createParticles() {
@@ -483,40 +422,57 @@ function createParticles() {
     particles = [];
 
     let count = Math.min(
-        130,
-        Math.floor(window.innerWidth / 10)
+        120,
+        Math.floor(canvas.width / 10)
     );
 
     for (let i = 0; i < count; i++) {
         particles.push(new Particle());
     }
-
 }
 
 function animateParticles() {
 
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    particles.forEach(particle => {
-
-        particle.update();
-        particle.draw();
-
+    particles.forEach(p => {
+        p.update();
+        p.draw();
     });
 
-    requestAnimationFrame(animateParticles);
+    // CONNECT NEARBY PARTICLES
+    for (let i = 0; i < particles.length; i++) {
 
+        for (let j = i + 1; j < particles.length; j++) {
+
+            let dx = particles[i].x - particles[j].x;
+            let dy = particles[i].y - particles[j].y;
+
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 120) {
+
+                ctx.strokeStyle =
+                    `rgba(255,136,0,${1 - distance / 120})`;
+
+                ctx.lineWidth = 0.5;
+
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.stroke();
+
+            }
+        }
+    }
+
+    requestAnimationFrame(animateParticles);
 }
 
-createParticles();
-animateParticles();
+window.addEventListener("resize", resizeCanvas);
 
-window.addEventListener("resize", createParticles);
+resizeCanvas();
+animateParticles();
 
 </script>
 
