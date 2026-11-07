@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Window</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 40px;
+        background: #1e1e1e;
+        font-family: Arial, sans-serif;
+    }
+
+    .window {
+        width: 90%;
+        max-width: 1200px;
+        height: 650px;
+        margin: auto;
+        border: 5px solid #ff8500;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 0 20px rgba(255, 133, 0, 0.3);
+    }
+
+    .window-header {
+        height: 40px;
+        min-height: 40px;
+        background: #ff8500;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 12px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .fullscreen-btn {
+        background: white;
+        color: #ff8500;
+        border: none;
+        padding: 7px 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .fullscreen-btn:hover {
+        background: #ffe0bd;
+    }
+
+    iframe {
+        width: 100%;
+        flex: 1;
+        border: none;
+    }
+
+    /* Fullscreen styling */
+    .window:fullscreen {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        border: 5px solid #ff8500;
+        border-radius: 0;
+        box-sizing: border-box;
+    }
+
+    @media (max-width: 600px) {
+        body {
+            padding: 10px;
+        }
+
+        .window {
+            width: 100%;
+            height: 80vh;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="window" id="websiteWindow">
+
+    <div class="window-header">
+        <span>Slope</span>
+
+        <button class="fullscreen-btn" onclick="toggleFullscreen()">
+            ⛶ Fullscreen
+        </button>
+    </div>
+
+    <iframe
+        src="https://rodyhorsegames.vercel.app/games/ovo2/index.html"
+        title="OvO 2"
+        allowfullscreen>
+    </iframe>
+
+</div>
+
+<script>
+    function toggleFullscreen() {
+        const windowElement = document.getElementById("websiteWindow");
+
+        if (!document.fullscreenElement) {
+            windowElement.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+</script>
+
+</body>
+</html>
