@@ -1,0 +1,524 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rody Horse Games</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #080808;
+    color: white;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* PARTICLES */
+#particles {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
+
+/* MAIN TITLE */
+.center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.center h1 {
+    color: #ff7900;
+    font-size: clamp(35px, 7vw, 75px);
+    text-align: center;
+    text-shadow: 0 0 25px #ff790077;
+}
+
+/* GAMES BUTTON */
+.topbar {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    z-index: 3;
+}
+
+.games-button {
+    background: #ff7900;
+    border: none;
+    border-radius: 9px;
+    padding: 13px 25px;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.games-button:hover {
+    background: #ff9a36;
+    transform: scale(1.06);
+}
+
+/* POPUP BACKGROUND */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    background: #000000bb;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+/* GAMES WINDOW */
+.games-window {
+    width: 100%;
+    max-width: 850px;
+    height: 80vh;
+    max-height: 700px;
+    background: #151515;
+    border: 1px solid #383838;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 0 40px #000;
+    animation: popup 0.25s ease;
+}
+
+@keyframes popup {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* WINDOW HEADER */
+.window-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.window-header h2 {
+    color: #ff7900;
+    font-size: 27px;
+}
+
+.close-button {
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #ff7900;
+}
+
+/* SEARCH */
+.search {
+    width: 100%;
+    padding: 14px;
+    border-radius: 9px;
+    background: #252525;
+    border: 1px solid #444;
+    color: white;
+    outline: none;
+    font-size: 16px;
+    margin-bottom: 22px;
+}
+
+.search:focus {
+    border-color: #ff7900;
+}
+
+/* GAME GRID */
+.game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    gap: 18px;
+    overflow-y: auto;
+    max-height: calc(100% - 110px);
+    padding: 3px;
+}
+
+/* GAME CARDS */
+.game-card {
+    background: #222;
+    border: 1px solid #363636;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    border-color: #ff7900;
+    box-shadow: 0 5px 20px #ff790022;
+}
+
+.game-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+    background: #333;
+}
+
+.game-info {
+    padding: 13px;
+}
+
+.game-info h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.game-info p {
+    color: #999;
+    font-size: 12px;
+}
+
+.no-games {
+    text-align: center;
+    color: #999;
+    padding: 30px;
+    grid-column: 1 / -1;
+}
+
+/* MOBILE */
+@media(max-width: 500px) {
+    .games-window {
+        padding: 17px;
+        height: 85vh;
+    }
+
+    .game-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .game-card img {
+        height: 100px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<!-- TOP RIGHT BUTTON -->
+<div class="topbar">
+    <button class="games-button" onclick="openGames()">
+        🎮 Games
+    </button>
+</div>
+
+<!-- CENTER TITLE -->
+<div class="center">
+    <h1>Rody Horse Games</h1>
+</div>
+
+<!-- GAMES POPUP -->
+<div class="modal" id="gamesModal">
+
+    <div class="games-window">
+
+        <div class="window-header">
+            <h2>🎮 Games Library</h2>
+
+            <button class="close-button" onclick="closeGames()">
+                ×
+            </button>
+        </div>
+
+        <input
+            type="text"
+            class="search"
+            id="searchBar"
+            placeholder="🔍 Search for games..."
+            oninput="searchGames()"
+        >
+
+        <div class="game-list" id="gameList"></div>
+
+    </div>
+</div>
+
+<script>
+
+// ===========================================
+// ADD YOUR GAMES HERE!
+// ===========================================
+
+const games = [
+
+    {
+        name: "Slope",
+        image: "https://rodyhorsegames.vercel.app/images/slope.png",
+        url: "https://rodyhorsesgames.vercel.app/games/slope/index.html"
+    },
+
+
+// ===========================================
+// DISPLAY GAMES
+// ===========================================
+
+function displayGames(gameArray) {
+
+    const list = document.getElementById("gameList");
+
+    list.innerHTML = "";
+
+    if (gameArray.length === 0) {
+        list.innerHTML =
+            '<div class="no-games">No games found!</div>';
+        return;
+    }
+
+    gameArray.forEach(game => {
+
+        const card = document.createElement("div");
+        card.className = "game-card";
+
+        const img = document.createElement("img");
+        img.src = game.image;
+        img.alt = game.name;
+        img.loading = "lazy";
+
+        img.onerror = () => {
+            img.src = "https://placehold.co/400x250/222222/ffffff?text=Game";
+        };
+
+        const info = document.createElement("div");
+        info.className = "game-info";
+
+        const title = document.createElement("h3");
+        title.textContent = game.name;
+
+        const description = document.createElement("p");
+        description.textContent = game.description;
+
+        info.appendChild(title);
+        info.appendChild(description);
+
+        card.appendChild(img);
+        card.appendChild(info);
+
+        card.onclick = () => {
+            if (game.url && game.url !== "#") {
+                window.open(game.url, "_blank");
+            }
+        };
+
+        list.appendChild(card);
+
+    });
+}
+
+// ===========================================
+// OPEN AND CLOSE WINDOW
+// ===========================================
+
+function openGames() {
+
+    document.getElementById("gamesModal")
+        .classList.add("active");
+
+    displayGames(games);
+
+    document.getElementById("searchBar").value = "";
+
+    document.getElementById("searchBar").focus();
+}
+
+function closeGames() {
+
+    document.getElementById("gamesModal")
+        .classList.remove("active");
+
+}
+
+// Close when clicking outside the window
+document.getElementById("gamesModal")
+.addEventListener("click", function(e) {
+
+    if (e.target === this) {
+        closeGames();
+    }
+
+});
+
+// Close with Escape
+document.addEventListener("keydown", function(e) {
+
+    if (e.key === "Escape") {
+        closeGames();
+    }
+
+});
+
+// ===========================================
+// SEARCH GAMES
+// ===========================================
+
+function searchGames() {
+
+    const query = document
+        .getElementById("searchBar")
+        .value.toLowerCase();
+
+    const filteredGames = games.filter(game =>
+        game.name.toLowerCase().includes(query) ||
+        game.description.toLowerCase().includes(query)
+    );
+
+    displayGames(filteredGames);
+
+}
+
+// ===========================================
+// ANIMATED ORANGE PARTICLES
+// ===========================================
+
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+let particles = [];
+
+function resizeCanvas() {
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+class Particle {
+
+    constructor() {
+
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+
+        this.size = Math.random() * 2.5 + 1;
+
+        this.speedX = (Math.random() - 0.5) * 0.7;
+        this.speedY = (Math.random() - 0.5) * 0.7;
+
+        this.opacity = Math.random() * 0.6 + 0.2;
+
+    }
+
+    update() {
+
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) {
+            this.speedX *= -1;
+        }
+
+        if (this.y < 0 || this.y > canvas.height) {
+            this.speedY *= -1;
+        }
+
+    }
+
+    draw() {
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.size,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            `rgba(255, 121, 0, ${this.opacity})`;
+
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = "#ff7900";
+
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+
+    }
+
+}
+
+function createParticles() {
+
+    particles = [];
+
+    let count = Math.min(
+        130,
+        Math.floor(window.innerWidth / 10)
+    );
+
+    for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+    }
+
+}
+
+function animateParticles() {
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    particles.forEach(particle => {
+
+        particle.update();
+        particle.draw();
+
+    });
+
+    requestAnimationFrame(animateParticles);
+
+}
+
+createParticles();
+animateParticles();
+
+window.addEventListener("resize", createParticles);
+
+</script>
+
+</body>
+</html>
