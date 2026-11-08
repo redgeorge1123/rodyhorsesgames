@@ -31,6 +31,29 @@ body {
     pointer-events: none;
 }
 
+/* BATTERY AND CLOCK */
+.system-info {
+    position: fixed;
+    top: 20px;
+    left: 25px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: #1b1b24;
+    border: 1px solid #ff8800;
+    border-radius: 9px;
+    padding: 12px 16px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    box-shadow: 0 0 12px #ff880033;
+}
+
+.system-info span {
+    white-space: nowrap;
+}
+
 /* TOP RIGHT GAMES BUTTON */
 .games-button {
     position: fixed;
@@ -206,6 +229,21 @@ body {
     .game-card img {
         height: 100px;
     }
+
+    .system-info {
+        top: 15px;
+        left: 10px;
+        gap: 8px;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .games-button {
+        top: 15px;
+        right: 10px;
+        padding: 10px 13px;
+        font-size: 14px;
+    }
 }
 </style>
 </head>
@@ -213,6 +251,12 @@ body {
 <body>
 
 <canvas id="particles"></canvas>
+
+<!-- BATTERY AND CLOCK -->
+<div class="system-info">
+    <span id="battery">🔋 Battery: Loading...</span>
+    <span id="clock">🕒 Loading...</span>
+</div>
 
 <!-- GAMES BUTTON -->
 <button class="games-button" onclick="openGames()">
@@ -233,13 +277,11 @@ body {
     <div class="window-header">
         <h2>🎮 Games</h2>
 
-        <!-- CLOSE X BUTTON -->
         <button class="close-button" onclick="closeGames()">
             &times;
         </button>
     </div>
 
-    <!-- SEARCH BAR -->
     <input
         class="search"
         id="searchInput"
@@ -248,7 +290,6 @@ body {
         oninput="searchGames()"
     >
 
-    <!-- GAME IMAGES -->
     <div class="games-grid" id="gamesGrid"></div>
 
 </div>
@@ -257,16 +298,7 @@ body {
 
 /* =====================================
    ADD GAMES HERE!
-   =====================================
-
-   Copy and paste another game below.
-
-   name  = Game name
-   image = Game thumbnail image URL
-   url   = Game link
-
-*/
-
+   ===================================== */
 
 const games = [
 
@@ -288,13 +320,11 @@ const games = [
         url: "https://rodyhorsegames.vercel.app/gamewindow/ovo2/index.html"
     },
 
-
     {
         name: "OvO 3 Dimention",
         image: "https://rodyhorsegames.vercel.app/images/ovo3.png",
         url: "https://rodyhorsegames.vercel.app/gamewindow/ovo3/index.html"
     },
-
 
     {
         name: "Minecraft",
@@ -302,25 +332,19 @@ const games = [
         url: "https://rodyhorsegames.vercel.app/gamewindow/minecraft/index.html"
     },
 
-
     {
         name: "Drift Boss",
         image: "https://rodyhorsegames.vercel.app/images/driftboss.png",
         url: "https://rodyhorsegames.vercel.app/gamewindow/driftboss/index.html"
     },
 
-
     {
         name: "2048",
         image: "https://rodyhorsegames.vercel.app/images/2048.png",
         url: "https://rodyhorsegames.vercel.app/gamewindow/2048/index.html"
-    },
-
-
-
+    }
 
 ];
-
 
 
 /* SHOW GAMES */
@@ -421,6 +445,83 @@ document.addEventListener("keydown", function(event) {
 /* INITIALIZE GAMES */
 
 displayGames(games);
+
+
+/* =====================================
+   LIVE CLOCK
+   ===================================== */
+
+function updateClock() {
+
+    const now = new Date();
+
+    const time = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+    });
+
+    document.getElementById("clock").textContent =
+        "🕒 " + time;
+
+}
+
+updateClock();
+
+setInterval(updateClock, 1000);
+
+
+/* =====================================
+   COMPUTER BATTERY
+   ===================================== */
+
+async function updateBattery() {
+
+    const batteryDisplay = document.getElementById("battery");
+
+    if (!navigator.getBattery) {
+
+        batteryDisplay.textContent = "🔋 Battery: N/A";
+        return;
+
+    }
+
+    try {
+
+        const battery = await navigator.getBattery();
+
+        function showBattery() {
+
+            const percentage = Math.round(battery.level * 100);
+
+            let icon = "🔋";
+
+            if (battery.charging) {
+                icon = "⚡";
+            } else if (percentage <= 20) {
+                icon = "🪫";
+            }
+
+            batteryDisplay.textContent =
+                icon + " " + percentage + "%" +
+                (battery.charging ? " Charging" : "");
+
+        }
+
+        showBattery();
+
+        battery.addEventListener("levelchange", showBattery);
+        battery.addEventListener("chargingchange", showBattery);
+
+    } catch (error) {
+
+        batteryDisplay.textContent = "🔋 Battery: Unavailable";
+
+    }
+
+}
+
+updateBattery();
 
 
 /* =====================================
