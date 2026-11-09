@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rody Horse Games</title>
 
+<link id="favicon" rel="icon" href="">
+
 <style>
 * {
     box-sizing: border-box;
@@ -45,48 +47,45 @@ body {
     color: white;
     font-size: 15px;
     font-weight: bold;
-    box-shadow: 0 0 12px #ff880033;
 }
 
 .system-info span {
     white-space: nowrap;
 }
 
-/* GAMES BUTTON */
-.games-button {
+/* TOP BUTTONS */
+.games-button,
+.soundboard-button,
+.cloak-button {
     position: fixed;
     top: 20px;
-    right: 25px;
     z-index: 5;
     background: #ff8800;
     color: white;
     border: none;
     border-radius: 9px;
-    padding: 13px 25px;
-    font-size: 17px;
+    padding: 13px 20px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+}
+
+.games-button {
+    right: 25px;
+}
+
+.soundboard-button {
+    right: 145px;
+}
+
+.cloak-button {
+    right: 300px;
 }
 
 .games-button:hover,
-.soundboard-button:hover {
+.soundboard-button:hover,
+.cloak-button:hover {
     background: #ffad32;
-}
-
-/* SOUNDBOARD BUTTON */
-.soundboard-button {
-    position: fixed;
-    top: 20px;
-    right: 155px;
-    z-index: 5;
-    background: #ff8800;
-    color: white;
-    border: none;
-    border-radius: 9px;
-    padding: 13px 25px;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
 }
 
 /* CENTER TITLE */
@@ -119,9 +118,10 @@ body {
     display: block;
 }
 
-/* GAMES WINDOW */
+/* WINDOWS */
 .games-window,
-.soundboard-window {
+.soundboard-window,
+.cloak-window {
     display: none;
     position: fixed;
     z-index: 10;
@@ -140,8 +140,117 @@ body {
 }
 
 .games-window.show,
-.soundboard-window.show {
+.soundboard-window.show,
+.cloak-window.show {
     display: block;
+}
+
+/* CLOAK WINDOW */
+.cloak-window {
+    width: 90%;
+    max-width: 500px;
+    height: auto;
+    max-height: 90vh;
+}
+
+.cloak-description {
+    color: #aaa;
+    margin-bottom: 22px;
+    line-height: 1.5;
+}
+
+.cloak-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: white;
+}
+
+.cloak-input {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 20px;
+    background: #292933;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+}
+
+.cloak-input:focus {
+    border-color: #ff8800;
+}
+
+.cloak-preview {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #292933;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.cloak-preview img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
+.cloak-preview-text {
+    min-width: 0;
+}
+
+.cloak-preview-text strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.cloak-preview-text span {
+    color: #aaa;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.cloak-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.apply-button,
+.reset-button {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.apply-button {
+    background: #ff8800;
+}
+
+.apply-button:hover {
+    background: #ffad32;
+}
+
+.reset-button {
+    background: #444450;
+}
+
+.reset-button:hover {
+    background: #5a5a68;
+}
+
+.cloak-message {
+    color: #ffad32;
+    font-size: 13px;
+    margin-top: 15px;
 }
 
 /* SOUNDBOARD IFRAME */
@@ -206,7 +315,6 @@ body {
     gap: 18px;
 }
 
-/* GAME CARD */
 .game-card {
     background: #292933;
     border-radius: 12px;
@@ -240,7 +348,7 @@ body {
     grid-column: 1 / -1;
 }
 
-@media(max-width: 500px) {
+@media(max-width: 650px) {
     .games-window,
     .soundboard-window {
         width: 95%;
@@ -258,25 +366,32 @@ body {
     }
 
     .system-info {
-        top: 15px;
+        top: 10px;
         left: 10px;
         gap: 8px;
         padding: 10px;
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .games-button {
-        top: 15px;
+        top: 65px;
         right: 10px;
-        padding: 10px 13px;
-        font-size: 14px;
+        padding: 9px 12px;
+        font-size: 13px;
     }
 
     .soundboard-button {
         top: 65px;
-        right: 10px;
-        padding: 10px 13px;
-        font-size: 14px;
+        right: 100px;
+        padding: 9px 12px;
+        font-size: 13px;
+    }
+
+    .cloak-button {
+        top: 65px;
+        right: 220px;
+        padding: 9px 12px;
+        font-size: 13px;
     }
 }
 </style>
@@ -302,6 +417,11 @@ body {
     🎵 SoundBoard
 </button>
 
+<!-- CLOAK BUTTON -->
+<button class="cloak-button" onclick="openCloak()">
+    🥷 Cloak
+</button>
+
 <!-- MAIN TITLE -->
 <div class="main-title">
     <h1>Rody Horse Games</h1>
@@ -315,9 +435,7 @@ body {
 
     <div class="window-header">
         <h2>🎮 Games</h2>
-        <button class="close-button" onclick="closeGames()">
-            &times;
-        </button>
+        <button class="close-button" onclick="closeGames()">&times;</button>
     </div>
 
     <input
@@ -337,10 +455,7 @@ body {
 
     <div class="window-header">
         <h2>🎵 SoundBoard</h2>
-
-        <button class="close-button" onclick="closeSoundBoard()">
-            &times;
-        </button>
+        <button class="close-button" onclick="closeSoundBoard()">&times;</button>
     </div>
 
     <iframe
@@ -351,10 +466,72 @@ body {
 
 </div>
 
+<!-- CLOAK WINDOW -->
+<div class="cloak-window" id="cloakWindow">
+
+    <div class="window-header">
+        <h2>🥷 Cloak Settings</h2>
+
+        <button class="close-button" onclick="closeCloak()">
+            &times;
+        </button>
+    </div>
+
+    <p class="cloak-description">
+        Customize how your website appears in the browser tab.
+        Change the tab title and favicon to whatever you want.
+    </p>
+
+    <label class="cloak-label" for="cloakName">
+        Website Tab Name
+    </label>
+
+    <input
+        class="cloak-input"
+        id="cloakName"
+        type="text"
+        placeholder="Enter any website name..."
+    >
+
+    <label class="cloak-label" for="cloakImage">
+        Tab Image URL
+    </label>
+
+    <input
+        class="cloak-input"
+        id="cloakImage"
+        type="url"
+        placeholder="https://example.com/image.png"
+    >
+
+    <!-- PREVIEW -->
+    <div class="cloak-preview">
+        <img id="cloakPreviewImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23ff8800'/%3E%3Ctext x='20' y='28' text-anchor='middle' font-size='25'%3E🌐%3C/text%3E%3C/svg%3E" alt="Preview">
+
+        <div class="cloak-preview-text">
+            <strong id="cloakPreviewName">Rody Horse Games</strong>
+            <span>Browser tab preview</span>
+        </div>
+    </div>
+
+    <div class="cloak-actions">
+        <button class="apply-button" onclick="applyCloak()">
+            ✓ Apply Changes
+        </button>
+
+        <button class="reset-button" onclick="resetCloak()">
+            ↻ Reset
+        </button>
+    </div>
+
+    <p class="cloak-message" id="cloakMessage"></p>
+
+</div>
+
 <script>
 
 /* =====================================
-   ADD GAMES HERE!
+   GAMES
    ===================================== */
 
 const games = [
@@ -364,73 +541,61 @@ const games = [
         image: "https://rodyhorsesgamesnew.vercel.app/images/slope.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/slope/index.html"
     },
-
     {
         name: "OvO",
         image: "https://rodyhorsesgamesnew.vercel.app/images/ovo.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/ovo/index.html"
     },
-
     {
         name: "OvO 2",
         image: "https://rodyhorsesgamesnew.vercel.app/images/ovo2.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/ovo2/index.html"
     },
-
     {
         name: "OvO 3 Dimention",
         image: "https://rodyhorsesgamesnew.vercel.app/images/ovo3.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/ovo3/index.html"
     },
-
     {
         name: "Minecraft",
         image: "https://rodyhorsesgamesnew.vercel.app/images/minecraft.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/minecraft/index.html"
     },
-
     {
         name: "Drift Boss",
         image: "https://rodyhorsesgamesnew.vercel.app/images/driftboss.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/driftboss/index.html"
     },
-
     {
         name: "2048",
         image: "https://rodyhorsesgamesnew.vercel.app/images/2048.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/2048/index.html"
     },
-
     {
         name: "Cookie Clicker",
         image: "https://rodyhorsesgamesnew.vercel.app/images/cookieclicker.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/cookieclicker/index.html"
     },
-
     {
         name: "Run 3",
         image: "https://rodyhorsesgamesnew.vercel.app/images/run3.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/run3/index.html"
     },
-
     {
         name: "Geometry Dash",
-        image: "https://rodyhorsesgamesnew.vercel.app/images/gd.png",
+        image: "https://rodyhorsenewgamesnew.vercel.app/gamewindow/gd/index.html",
         url: "https://rodyhorsenewgamesnew.vercel.app/gamewindow/gd/index.html"
     },
-
     {
         name: "Geometry Dash Lite",
         image: "https://rodyhorsesgamesnew.vercel.app/images/gdlite.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/gdlite/index.html"
     },
-
     {
         name: "Slice It All",
         image: "https://rodyhorsesgamesnew.vercel.app/images/sliceitall.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/sliceitall/index.html"
     },
-
     {
         name: "Bendy And The Ink Machine",
         image: "https://rodyhorsesgamesnew.vercel.app/images/bendy.png",
@@ -440,7 +605,9 @@ const games = [
 ];
 
 
-/* SHOW GAMES */
+/* =====================================
+   DISPLAY GAMES
+   ===================================== */
 
 function displayGames(gameList) {
 
@@ -480,7 +647,9 @@ function displayGames(gameList) {
 }
 
 
-/* SEARCH GAMES */
+/* =====================================
+   SEARCH GAMES
+   ===================================== */
 
 function searchGames() {
 
@@ -497,17 +666,16 @@ function searchGames() {
 }
 
 
-/* OPEN GAMES WINDOW */
+/* =====================================
+   OPEN AND CLOSE WINDOWS
+   ===================================== */
 
 function openGames() {
 
-    closeSoundBoard();
+    closeWindows();
 
-    document.getElementById("gamesWindow")
-        .classList.add("show");
-
-    document.getElementById("overlay")
-        .classList.add("show");
+    document.getElementById("gamesWindow").classList.add("show");
+    document.getElementById("overlay").classList.add("show");
 
     document.getElementById("searchInput").value = "";
 
@@ -515,56 +683,150 @@ function openGames() {
 
 }
 
-
-/* CLOSE GAMES WINDOW */
-
 function closeGames() {
-
-    document.getElementById("gamesWindow")
-        .classList.remove("show");
-
+    document.getElementById("gamesWindow").classList.remove("show");
 }
-
-
-/* OPEN SOUNDBOARD */
 
 function openSoundBoard() {
 
-    closeGames();
+    closeWindows();
 
-    document.getElementById("soundboardWindow")
-        .classList.add("show");
-
-    document.getElementById("overlay")
-        .classList.add("show");
+    document.getElementById("soundboardWindow").classList.add("show");
+    document.getElementById("overlay").classList.add("show");
 
 }
-
-
-/* CLOSE SOUNDBOARD */
 
 function closeSoundBoard() {
+    document.getElementById("soundboardWindow").classList.remove("show");
+}
 
-    document.getElementById("soundboardWindow")
-        .classList.remove("show");
+function openCloak() {
+
+    closeWindows();
+
+    document.getElementById("cloakWindow").classList.add("show");
+    document.getElementById("overlay").classList.add("show");
 
 }
 
-
-/* CLOSE ALL WINDOWS */
+function closeCloak() {
+    document.getElementById("cloakWindow").classList.remove("show");
+}
 
 function closeWindows() {
 
     closeGames();
     closeSoundBoard();
+    closeCloak();
 
-    document.getElementById("overlay")
-        .classList.remove("show");
+    document.getElementById("overlay").classList.remove("show");
 
 }
 
 
-/* ESCAPE KEY CLOSES WINDOWS */
+/* =====================================
+   CLOAK SYSTEM
+   ===================================== */
+
+const originalTitle = "Rody Horse Games";
+const originalIcon = "data:image/svg+xml," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="8" fill="#ff8800"/><text x="20" y="29" text-anchor="middle" font-size="27">🐴</text></svg>'
+);
+
+function updateCloakPreview() {
+
+    const name = document.getElementById("cloakName").value;
+    const image = document.getElementById("cloakImage").value;
+
+    document.getElementById("cloakPreviewName").textContent =
+        name.trim() || originalTitle;
+
+    document.getElementById("cloakPreviewImage").src =
+        image.trim() || originalIcon;
+
+}
+
+document.getElementById("cloakName").addEventListener(
+    "input",
+    updateCloakPreview
+);
+
+document.getElementById("cloakImage").addEventListener(
+    "input",
+    updateCloakPreview
+);
+
+function applyCloak() {
+
+    const name = document.getElementById("cloakName").value.trim();
+    const image = document.getElementById("cloakImage").value.trim();
+    const message = document.getElementById("cloakMessage");
+
+    if (!name && !image) {
+        message.textContent = "Enter a tab name or image URL first!";
+        return;
+    }
+
+    let validImage = "";
+
+    if (image) {
+
+        try {
+            const parsedURL = new URL(image);
+
+            if (!["http:", "https:"].includes(parsedURL.protocol)) {
+                throw new Error("Invalid image URL");
+            }
+
+            validImage = parsedURL.href;
+
+        } catch (error) {
+            message.textContent = "Please enter a valid image URL!";
+            return;
+        }
+
+    }
+
+    // CHANGE TAB TITLE
+    document.title = name || originalTitle;
+
+    // CHANGE TAB ICON
+    if (validImage) {
+
+        let favicon = document.getElementById("favicon");
+
+        favicon.href = validImage;
+
+    }
+
+    message.textContent = "✓ Cloak changes applied!";
+
+}
+
+function resetCloak() {
+
+    // RESTORE ORIGINAL TITLE
+    document.title = originalTitle;
+
+    // RESTORE ORIGINAL ICON
+    document.getElementById("favicon").href = originalIcon;
+
+    // CLEAR INPUTS
+    document.getElementById("cloakName").value = "";
+    document.getElementById("cloakImage").value = "";
+
+    // UPDATE PREVIEW
+    updateCloakPreview();
+
+    document.getElementById("cloakMessage").textContent =
+        "✓ Original tab settings restored!";
+
+}
+
+
+/* =====================================
+   ESCAPE KEY
+   ===================================== */
 
 document.addEventListener("keydown", function(event) {
 
@@ -575,7 +837,9 @@ document.addEventListener("keydown", function(event) {
 });
 
 
-/* INITIALIZE GAMES */
+/* =====================================
+   INITIALIZE GAMES
+   ===================================== */
 
 displayGames(games);
 
