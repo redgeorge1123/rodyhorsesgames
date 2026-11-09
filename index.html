@@ -21,7 +21,6 @@ body {
     overflow: hidden;
 }
 
-/* PARTICLE BACKGROUND */
 #particles {
     position: fixed;
     inset: 0;
@@ -31,7 +30,6 @@ body {
     pointer-events: none;
 }
 
-/* BATTERY AND CLOCK */
 .system-info {
     position: fixed;
     top: 20px;
@@ -54,7 +52,7 @@ body {
     white-space: nowrap;
 }
 
-/* TOP RIGHT GAMES BUTTON */
+/* GAMES BUTTON */
 .games-button {
     position: fixed;
     top: 20px;
@@ -70,8 +68,25 @@ body {
     cursor: pointer;
 }
 
-.games-button:hover {
+.games-button:hover,
+.soundboard-button:hover {
     background: #ffad32;
+}
+
+/* SOUNDBOARD BUTTON */
+.soundboard-button {
+    position: fixed;
+    top: 20px;
+    right: 155px;
+    z-index: 5;
+    background: #ff8800;
+    color: white;
+    border: none;
+    border-radius: 9px;
+    padding: 13px 25px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 /* CENTER TITLE */
@@ -91,7 +106,7 @@ body {
     text-shadow: 0 0 20px #ff880055;
 }
 
-/* DARK BACKGROUND OVERLAY */
+/* OVERLAY */
 .overlay {
     display: none;
     position: fixed;
@@ -104,8 +119,9 @@ body {
     display: block;
 }
 
-/* GAMES POPUP WINDOW */
-.games-window {
+/* GAMES WINDOW */
+.games-window,
+.soundboard-window {
     display: none;
     position: fixed;
     z-index: 10;
@@ -123,8 +139,18 @@ body {
     overflow-y: auto;
 }
 
-.games-window.show {
+.games-window.show,
+.soundboard-window.show {
     display: block;
+}
+
+/* SOUNDBOARD IFRAME */
+.soundboard-window iframe {
+    width: 100%;
+    height: calc(100% - 65px);
+    border: none;
+    border-radius: 10px;
+    background: white;
 }
 
 /* HEADER */
@@ -140,7 +166,7 @@ body {
     font-size: 27px;
 }
 
-/* X BUTTON */
+/* CLOSE BUTTON */
 .close-button {
     background: #ff3838;
     color: white;
@@ -173,7 +199,7 @@ body {
     border-color: #ff8800;
 }
 
-/* GAME IMAGES GRID */
+/* GAME GRID */
 .games-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -215,7 +241,8 @@ body {
 }
 
 @media(max-width: 500px) {
-    .games-window {
+    .games-window,
+    .soundboard-window {
         width: 95%;
         height: 85vh;
         padding: 14px;
@@ -244,6 +271,13 @@ body {
         padding: 10px 13px;
         font-size: 14px;
     }
+
+    .soundboard-button {
+        top: 65px;
+        right: 10px;
+        padding: 10px 13px;
+        font-size: 14px;
+    }
 }
 </style>
 </head>
@@ -263,20 +297,24 @@ body {
     🎮 Games
 </button>
 
+<!-- SOUNDBOARD BUTTON -->
+<button class="soundboard-button" onclick="openSoundBoard()">
+    🎵 SoundBoard
+</button>
+
 <!-- MAIN TITLE -->
 <div class="main-title">
     <h1>Rody Horse Games</h1>
 </div>
 
 <!-- OVERLAY -->
-<div class="overlay" id="overlay" onclick="closeGames()"></div>
+<div class="overlay" id="overlay" onclick="closeWindows()"></div>
 
 <!-- GAMES WINDOW -->
 <div class="games-window" id="gamesWindow">
 
     <div class="window-header">
         <h2>🎮 Games</h2>
-
         <button class="close-button" onclick="closeGames()">
             &times;
         </button>
@@ -291,6 +329,25 @@ body {
     >
 
     <div class="games-grid" id="gamesGrid"></div>
+
+</div>
+
+<!-- SOUNDBOARD WINDOW -->
+<div class="soundboard-window" id="soundboardWindow">
+
+    <div class="window-header">
+        <h2>🎵 SoundBoard</h2>
+
+        <button class="close-button" onclick="closeSoundBoard()">
+            &times;
+        </button>
+    </div>
+
+    <iframe
+        src="https://rodyhorsesgamesnew.vercel.app/soundboard.html"
+        title="SoundBoard"
+        allow="autoplay">
+    </iframe>
 
 </div>
 
@@ -343,7 +400,7 @@ const games = [
         image: "https://rodyhorsesgamesnew.vercel.app/images/2048.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/2048/index.html"
     },
- 
+
     {
         name: "Cookie Clicker",
         image: "https://rodyhorsesgamesnew.vercel.app/images/cookieclicker.png",
@@ -378,8 +435,7 @@ const games = [
         name: "Bendy And The Ink Machine",
         image: "https://rodyhorsesgamesnew.vercel.app/images/bendy.png",
         url: "https://rodyhorsesgamesnew.vercel.app/gamewindow/bendy/index.html"
-    },
-
+    }
 
 ];
 
@@ -420,6 +476,7 @@ function displayGames(gameList) {
         grid.appendChild(card);
 
     });
+
 }
 
 
@@ -436,12 +493,15 @@ function searchGames() {
     );
 
     displayGames(filteredGames);
+
 }
 
 
 /* OPEN GAMES WINDOW */
 
 function openGames() {
+
+    closeSoundBoard();
 
     document.getElementById("gamesWindow")
         .classList.add("show");
@@ -452,6 +512,7 @@ function openGames() {
     document.getElementById("searchInput").value = "";
 
     displayGames(games);
+
 }
 
 
@@ -462,18 +523,53 @@ function closeGames() {
     document.getElementById("gamesWindow")
         .classList.remove("show");
 
+}
+
+
+/* OPEN SOUNDBOARD */
+
+function openSoundBoard() {
+
+    closeGames();
+
+    document.getElementById("soundboardWindow")
+        .classList.add("show");
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+}
+
+
+/* CLOSE SOUNDBOARD */
+
+function closeSoundBoard() {
+
+    document.getElementById("soundboardWindow")
+        .classList.remove("show");
+
+}
+
+
+/* CLOSE ALL WINDOWS */
+
+function closeWindows() {
+
+    closeGames();
+    closeSoundBoard();
+
     document.getElementById("overlay")
         .classList.remove("show");
 
 }
 
 
-/* ESCAPE KEY CLOSES WINDOW */
+/* ESCAPE KEY CLOSES WINDOWS */
 
 document.addEventListener("keydown", function(event) {
 
     if (event.key === "Escape") {
-        closeGames();
+        closeWindows();
     }
 
 });
@@ -517,10 +613,8 @@ async function updateBattery() {
     const batteryDisplay = document.getElementById("battery");
 
     if (!navigator.getBattery) {
-
         batteryDisplay.textContent = "🔋 Battery: N/A";
         return;
-
     }
 
     try {
@@ -580,11 +674,13 @@ function resizeCanvas() {
     for (let i = 0; i < 100; i++) {
 
         particles.push({
+
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
             size: Math.random() * 2 + 1,
             speedX: (Math.random() - 0.5) * 0.7,
             speedY: (Math.random() - 0.5) * 0.7
+
         });
 
     }
@@ -609,6 +705,7 @@ function animateParticles() {
         }
 
         ctx.fillStyle = "#ff8800";
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
