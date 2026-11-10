@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rody Horse Games</title>
-
 <link id="favicon" rel="icon" href="">
 
 <style>
@@ -56,7 +55,8 @@ body {
 /* TOP BUTTONS */
 .games-button,
 .soundboard-button,
-.cloak-button {
+.cloak-button,
+.browser-button {
     position: fixed;
     top: 20px;
     z-index: 5;
@@ -70,21 +70,19 @@ body {
     cursor: pointer;
 }
 
-.games-button {
+.games-button { right: 25px; }
+.soundboard-button { right: 145px; }
+.cloak-button { right: 300px; }
+
+.browser-button {
+    top: 75px;
     right: 25px;
-}
-
-.soundboard-button {
-    right: 145px;
-}
-
-.cloak-button {
-    right: 300px;
 }
 
 .games-button:hover,
 .soundboard-button:hover,
-.cloak-button:hover {
+.cloak-button:hover,
+.browser-button:hover {
     background: #ffad32;
 }
 
@@ -121,7 +119,8 @@ body {
 /* WINDOWS */
 .games-window,
 .soundboard-window,
-.cloak-window {
+.cloak-window,
+.browser-window {
     display: none;
     position: fixed;
     z-index: 10;
@@ -141,7 +140,8 @@ body {
 
 .games-window.show,
 .soundboard-window.show,
-.cloak-window.show {
+.cloak-window.show,
+.browser-window.show {
     display: block;
 }
 
@@ -262,6 +262,55 @@ body {
     background: white;
 }
 
+/* BROWSER */
+.browser-window {
+    max-width: 1100px;
+}
+
+.browser-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.browser-bar input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px;
+    background: #292933;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+}
+
+.browser-bar input:focus {
+    border-color: #ff8800;
+}
+
+.browser-bar button {
+    background: #ff8800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.browser-bar button:hover {
+    background: #ffad32;
+}
+
+.browser-window iframe {
+    width: 100%;
+    height: calc(100% - 115px);
+    border: none;
+    border-radius: 10px;
+    background: white;
+}
+
 /* HEADER */
 .window-header {
     display: flex;
@@ -350,7 +399,8 @@ body {
 
 @media(max-width: 650px) {
     .games-window,
-    .soundboard-window {
+    .soundboard-window,
+    .browser-window {
         width: 95%;
         height: 85vh;
         padding: 14px;
@@ -393,6 +443,25 @@ body {
         padding: 9px 12px;
         font-size: 13px;
     }
+
+    .browser-button {
+        top: 110px;
+        right: 10px;
+        padding: 9px 12px;
+        font-size: 13px;
+    }
+}
+
+/* SMALL SCREEN BROWSER BAR */
+@media(max-width: 400px) {
+    .browser-bar {
+        flex-wrap: wrap;
+    }
+
+    .browser-bar input {
+        width: 100%;
+        flex-basis: 100%;
+    }
 }
 </style>
 </head>
@@ -407,20 +476,11 @@ body {
     <span id="clock">🕒 Loading...</span>
 </div>
 
-<!-- GAMES BUTTON -->
-<button class="games-button" onclick="openGames()">
-    🎮 Games
-</button>
-
-<!-- SOUNDBOARD BUTTON -->
-<button class="soundboard-button" onclick="openSoundBoard()">
-    🎵 SoundBoard
-</button>
-
-<!-- CLOAK BUTTON -->
-<button class="cloak-button" onclick="openCloak()">
-    🥷 Cloak
-</button>
+<!-- TOP BUTTONS -->
+<button class="games-button" onclick="openGames()">🎮 Games</button>
+<button class="soundboard-button" onclick="openSoundBoard()">🎵 SoundBoard</button>
+<button class="cloak-button" onclick="openCloak()">🥷 Cloak</button>
+<button class="browser-button" onclick="openBrowser()">🌐 Browser</button>
 
 <!-- MAIN TITLE -->
 <div class="main-title">
@@ -432,49 +492,32 @@ body {
 
 <!-- GAMES WINDOW -->
 <div class="games-window" id="gamesWindow">
-
     <div class="window-header">
         <h2>🎮 Games</h2>
         <button class="close-button" onclick="closeGames()">&times;</button>
     </div>
 
-    <input
-        class="search"
-        id="searchInput"
-        type="text"
-        placeholder="🔍 Search games..."
-        oninput="searchGames()"
-    >
+    <input class="search" id="searchInput" type="text"
+        placeholder="🔍 Search games..." oninput="searchGames()">
 
     <div class="games-grid" id="gamesGrid"></div>
-
 </div>
 
 <!-- SOUNDBOARD WINDOW -->
 <div class="soundboard-window" id="soundboardWindow">
-
     <div class="window-header">
         <h2>🎵 SoundBoard</h2>
         <button class="close-button" onclick="closeSoundBoard()">&times;</button>
     </div>
 
-    <iframe
-        src="/soundboard.html"
-        title="SoundBoard"
-        allow="autoplay">
-    </iframe>
-
+    <iframe src="/soundboard.html" title="SoundBoard" allow="autoplay"></iframe>
 </div>
 
 <!-- CLOAK WINDOW -->
 <div class="cloak-window" id="cloakWindow">
-
     <div class="window-header">
         <h2>🥷 Cloak Settings</h2>
-
-        <button class="close-button" onclick="closeCloak()">
-            &times;
-        </button>
+        <button class="close-button" onclick="closeCloak()">&times;</button>
     </div>
 
     <p class="cloak-description">
@@ -482,31 +525,18 @@ body {
         Change the tab title and favicon to whatever you want.
     </p>
 
-    <label class="cloak-label" for="cloakName">
-        Website Tab Name
-    </label>
+    <label class="cloak-label" for="cloakName">Website Tab Name</label>
+    <input class="cloak-input" id="cloakName" type="text"
+        placeholder="Enter any website name...">
 
-    <input
-        class="cloak-input"
-        id="cloakName"
-        type="text"
-        placeholder="Enter any website name..."
-    >
+    <label class="cloak-label" for="cloakImage">Tab Image URL</label>
+    <input class="cloak-input" id="cloakImage" type="url"
+        placeholder="https://example.com/image.png">
 
-    <label class="cloak-label" for="cloakImage">
-        Tab Image URL
-    </label>
-
-    <input
-        class="cloak-input"
-        id="cloakImage"
-        type="url"
-        placeholder="https://example.com/image.png"
-    >
-
-    <!-- PREVIEW -->
     <div class="cloak-preview">
-        <img id="cloakPreviewImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23ff8800'/%3E%3Ctext x='20' y='28' text-anchor='middle' font-size='25'%3E🌐%3C/text%3E%3C/svg%3E" alt="Preview">
+        <img id="cloakPreviewImage"
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23ff8800'/%3E%3Ctext x='20' y='28' text-anchor='middle' font-size='25'%3E🌐%3C/text%3E%3C/svg%3E"
+            alt="Preview">
 
         <div class="cloak-preview-text">
             <strong id="cloakPreviewName">Rody Horse Games</strong>
@@ -515,129 +545,72 @@ body {
     </div>
 
     <div class="cloak-actions">
-        <button class="apply-button" onclick="applyCloak()">
-            ✓ Apply Changes
-        </button>
-
-        <button class="reset-button" onclick="resetCloak()">
-            ↻ Reset
-        </button>
+        <button class="apply-button" onclick="applyCloak()">✓ Apply Changes</button>
+        <button class="reset-button" onclick="resetCloak()">↻ Reset</button>
     </div>
 
     <p class="cloak-message" id="cloakMessage"></p>
+</div>
 
+<!-- BROWSER WINDOW -->
+<div class="browser-window" id="browserWindow">
+    <div class="window-header">
+        <h2>🌐 Browser</h2>
+        <button class="close-button" onclick="closeBrowser()">&times;</button>
+    </div>
+
+    <div class="browser-bar">
+        <input
+            type="text"
+            id="browserURL"
+            placeholder="Enter a website address..."
+            onkeydown="if(event.key === 'Enter') loadBrowser()">
+
+        <button onclick="loadBrowser()">Go</button>
+    </div>
+
+    <iframe
+        id="browserFrame"
+        src="about:blank"
+        title="Browser">
+    </iframe>
 </div>
 
 <script>
 
-/* =====================================
-   GAMES
-   ===================================== */
+/* GAMES */
 
 const games = [
-
-    {
-        name: "Slope",
-        image: "/images/slope.png",
-        url: "/gamewindow/slope/"
-    },
-    {
-        name: "OvO",
-        image: "/images/ovo.png",
-        url: "/gamewindow/ovo/"
-    },
-    {
-        name: "OvO 2",
-        image: "/images/ovo2.png",
-        url: "/gamewindow/ovo2/"
-    },
-    {
-        name: "OvO 3 Dimention",
-        image: "/images/ovo3.png",
-        url: "/gamewindow/ovo3/"
-    },
-    {
-        name: "Minecraft",
-        image: "/images/minecraft.png",
-        url: "/gamewindow/minecraft/"
-    },
-    {
-        name: "Drift Boss",
-        image: "/images/driftboss.png",
-        url: "/gamewindow/driftboss/"
-    },
-    {
-        name: "2048",
-        image: "/images/2048.png",
-        url: "/gamewindow/2048/"
-    },
-    {
-        name: "Cookie Clicker",
-        image: "/images/cookieclicker.png",
-        url: "/gamewindow/cookieclicker/"
-    },
-    {
-        name: "Run 3",
-        image: "/images/run3.png",
-        url: "/gamewindow/run3/"
-    },
-    {
-        name: "Geometry Dash",
-        image: "/images/gd.png",
-        url: "/gamewindow/gd/"
-    },
-    {
-        name: "Geometry Dash Lite",
-        image: "/images/gdlite.png",
-        url: "/gamewindow/gdlite/"
-    },
-    {
-        name: "Slice It All",
-        image: "/images/sliceitall.png",
-        url: "/gamewindow/sliceitall/"
-    },
-    {
-        name: "Bendy And The Ink Machine",
-        image: "/images/bendy.png",
-        url: "/gamewindow/bendy/"
-    },
-    {
-        name: "Schoolboy Runaway",
-        image: "/images/schoolboy.png",
-        url: "/gamewindow/schoolboy/"
-    },
-    {
-        name: "Gorilla Tag",
-        image: "/images/gtag.png",
-        url: "/gamewindow/gtag/"
-    },
-    {
-        name: "Death Run 3D",
-        image: "/images/deathrun.png",
-        url: "/gamewindow/deathrun3d/"
-    },
-
+    {name:"Slope",image:"/images/slope.png",url:"/gamewindow/slope/"},
+    {name:"OvO",image:"/images/ovo.png",url:"/gamewindow/ovo/"},
+    {name:"OvO 2",image:"/images/ovo2.png",url:"/gamewindow/ovo2/"},
+    {name:"OvO 3 Dimention",image:"/images/ovo3.png",url:"/gamewindow/ovo3/"},
+    {name:"Minecraft",image:"/images/minecraft.png",url:"/gamewindow/minecraft/"},
+    {name:"Drift Boss",image:"/images/driftboss.png",url:"/gamewindow/driftboss/"},
+    {name:"2048",image:"/images/2048.png",url:"/gamewindow/2048/"},
+    {name:"Cookie Clicker",image:"/images/cookieclicker.png",url:"/gamewindow/cookieclicker/"},
+    {name:"Run 3",image:"/images/run3.png",url:"/gamewindow/run3/"},
+    {name:"Geometry Dash",image:"/images/gd.png",url:"/gamewindow/gd/"},
+    {name:"Geometry Dash Lite",image:"/images/gdlite.png",url:"/gamewindow/gdlite/"},
+    {name:"Slice It All",image:"/images/sliceitall.png",url:"/gamewindow/sliceitall/"},
+    {name:"Bendy And The Ink Machine",image:"/images/bendy.png",url:"/gamewindow/bendy/"},
+    {name:"Schoolboy Runaway",image:"/images/schoolboy.png",url:"/gamewindow/schoolboy/"},
+    {name:"Gorilla Tag",image:"/images/gtag.png",url:"/gamewindow/gtag/"},
+    {name:"Death Run 3D",image:"/images/deathrun.png",url:"/gamewindow/deathrun3d/"}
 ];
 
-
-/* =====================================
-   DISPLAY GAMES
-   ===================================== */
+/* DISPLAY GAMES */
 
 function displayGames(gameList) {
-
     const grid = document.getElementById("gamesGrid");
-
     grid.innerHTML = "";
 
     if (gameList.length === 0) {
-        grid.innerHTML =
-            '<div class="no-games">No games found!</div>';
+        grid.innerHTML = '<div class="no-games">No games found!</div>';
         return;
     }
 
     gameList.forEach(game => {
-
         const card = document.createElement("div");
         card.className = "game-card";
 
@@ -656,46 +629,29 @@ function displayGames(gameList) {
         });
 
         grid.appendChild(card);
-
     });
-
 }
 
-
-/* =====================================
-   SEARCH GAMES
-   ===================================== */
+/* SEARCH GAMES */
 
 function searchGames() {
-
-    const search = document
-        .getElementById("searchInput")
-        .value.toLowerCase();
+    const search = document.getElementById("searchInput").value.toLowerCase();
 
     const filteredGames = games.filter(game =>
         game.name.toLowerCase().includes(search)
     );
 
     displayGames(filteredGames);
-
 }
 
-
-/* =====================================
-   OPEN AND CLOSE WINDOWS
-   ===================================== */
+/* WINDOWS */
 
 function openGames() {
-
     closeWindows();
-
     document.getElementById("gamesWindow").classList.add("show");
     document.getElementById("overlay").classList.add("show");
-
     document.getElementById("searchInput").value = "";
-
     displayGames(games);
-
 }
 
 function closeGames() {
@@ -703,12 +659,9 @@ function closeGames() {
 }
 
 function openSoundBoard() {
-
     closeWindows();
-
     document.getElementById("soundboardWindow").classList.add("show");
     document.getElementById("overlay").classList.add("show");
-
 }
 
 function closeSoundBoard() {
@@ -716,38 +669,63 @@ function closeSoundBoard() {
 }
 
 function openCloak() {
-
     closeWindows();
-
     document.getElementById("cloakWindow").classList.add("show");
     document.getElementById("overlay").classList.add("show");
-
 }
 
 function closeCloak() {
     document.getElementById("cloakWindow").classList.remove("show");
 }
 
-function closeWindows() {
+/* BROWSER SYSTEM */
 
+function openBrowser() {
+    closeWindows();
+    document.getElementById("browserWindow").classList.add("show");
+    document.getElementById("overlay").classList.add("show");
+}
+
+function closeBrowser() {
+    document.getElementById("browserWindow").classList.remove("show");
+}
+
+function loadBrowser() {
+    let url = document.getElementById("browserURL").value.trim();
+
+    if (!url) return;
+
+    if (!/^https?:\/\//i.test(url)) {
+        url = "https://" + url;
+    }
+
+    try {
+        const parsedURL = new URL(url);
+
+        if (!["http:", "https:"].includes(parsedURL.protocol)) {
+            return;
+        }
+
+        document.getElementById("browserFrame").src = parsedURL.href;
+    } catch (error) {
+        alert("Please enter a valid website address.");
+    }
+}
+
+function closeWindows() {
     closeGames();
     closeSoundBoard();
     closeCloak();
-
+    closeBrowser();
     document.getElementById("overlay").classList.remove("show");
-
 }
 
-
-/* =====================================
-   CLOAK SYSTEM
-   ===================================== */
+/* CLOAK SYSTEM */
 
 const originalTitle = "Rody Horse Games";
 const originalIcon = "images/favicon.png";
 
 function updateCloakPreview() {
-
     const name = document.getElementById("cloakName").value;
     const image = document.getElementById("cloakImage").value;
 
@@ -756,21 +734,12 @@ function updateCloakPreview() {
 
     document.getElementById("cloakPreviewImage").src =
         image.trim() || originalIcon;
-
 }
 
-document.getElementById("cloakName").addEventListener(
-    "input",
-    updateCloakPreview
-);
-
-document.getElementById("cloakImage").addEventListener(
-    "input",
-    updateCloakPreview
-);
+document.getElementById("cloakName").addEventListener("input", updateCloakPreview);
+document.getElementById("cloakImage").addEventListener("input", updateCloakPreview);
 
 function applyCloak() {
-
     const name = document.getElementById("cloakName").value.trim();
     const image = document.getElementById("cloakImage").value.trim();
     const message = document.getElementById("cloakMessage");
@@ -783,7 +752,6 @@ function applyCloak() {
     let validImage = "";
 
     if (image) {
-
         try {
             const parsedURL = new URL(image);
 
@@ -792,77 +760,48 @@ function applyCloak() {
             }
 
             validImage = parsedURL.href;
-
         } catch (error) {
             message.textContent = "Please enter a valid image URL!";
             return;
         }
-
     }
 
-    // CHANGE TAB TITLE
     document.title = name || originalTitle;
 
-    // CHANGE TAB ICON
     if (validImage) {
-
-        let favicon = document.getElementById("favicon");
-
-        favicon.href = validImage;
-
+        document.getElementById("favicon").href = validImage;
     }
 
     message.textContent = "✓ Cloak changes applied!";
-
 }
 
 function resetCloak() {
-
-    // RESTORE ORIGINAL TITLE
     document.title = originalTitle;
-
-    // RESTORE ORIGINAL ICON
     document.getElementById("favicon").href = originalIcon;
-
-    // CLEAR INPUTS
     document.getElementById("cloakName").value = "";
     document.getElementById("cloakImage").value = "";
 
-    // UPDATE PREVIEW
     updateCloakPreview();
 
     document.getElementById("cloakMessage").textContent =
         "✓ Original tab settings restored!";
-
 }
 
-
-/* =====================================
-   ESCAPE KEY
-   ===================================== */
+/* ESCAPE KEY */
 
 document.addEventListener("keydown", function(event) {
-
     if (event.key === "Escape") {
         closeWindows();
     }
-
 });
 
-
-/* =====================================
-   INITIALIZE GAMES
-   ===================================== */
+/* INITIALIZE GAMES */
 
 displayGames(games);
 
-
-/* =====================================
-   LIVE CLOCK
-   ===================================== */
+/* LIVE CLOCK */
 
 function updateClock() {
-
     const now = new Date();
 
     const time = now.toLocaleTimeString([], {
@@ -871,22 +810,15 @@ function updateClock() {
         second: "2-digit"
     });
 
-    document.getElementById("clock").textContent =
-        "🕒 " + time;
-
+    document.getElementById("clock").textContent = "🕒 " + time;
 }
 
 updateClock();
-
 setInterval(updateClock, 1000);
 
-
-/* =====================================
-   COMPUTER BATTERY
-   ===================================== */
+/* COMPUTER BATTERY */
 
 async function updateBattery() {
-
     const batteryDisplay = document.getElementById("battery");
 
     if (!navigator.getBattery) {
@@ -895,11 +827,9 @@ async function updateBattery() {
     }
 
     try {
-
         const battery = await navigator.getBattery();
 
         function showBattery() {
-
             const percentage = Math.round(battery.level * 100);
 
             let icon = "🔋";
@@ -913,7 +843,6 @@ async function updateBattery() {
             batteryDisplay.textContent =
                 icon + " " + percentage + "%" +
                 (battery.charging ? " Charging" : "");
-
         }
 
         showBattery();
@@ -922,19 +851,13 @@ async function updateBattery() {
         battery.addEventListener("chargingchange", showBattery);
 
     } catch (error) {
-
         batteryDisplay.textContent = "🔋 Battery: Unavailable";
-
     }
-
 }
 
 updateBattery();
 
-
-/* =====================================
-   PARTICLE BACKGROUND
-   ===================================== */
+/* PARTICLE BACKGROUND */
 
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
@@ -942,87 +865,59 @@ const ctx = canvas.getContext("2d");
 let particles = [];
 
 function resizeCanvas() {
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
     particles = [];
 
     for (let i = 0; i < 100; i++) {
-
         particles.push({
-
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
             size: Math.random() * 2 + 1,
             speedX: (Math.random() - 0.5) * 0.7,
             speedY: (Math.random() - 0.5) * 0.7
-
         });
-
     }
-
 }
 
 function animateParticles() {
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     particles.forEach((p, i) => {
-
         p.x += p.speedX;
         p.y += p.speedY;
 
-        if (p.x < 0 || p.x > canvas.width) {
-            p.speedX *= -1;
-        }
-
-        if (p.y < 0 || p.y > canvas.height) {
-            p.speedY *= -1;
-        }
+        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
 
         ctx.fillStyle = "#ff8800";
-
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
 
-        // CONNECT PARTICLES
         for (let j = i + 1; j < particles.length; j++) {
-
             const dx = p.x - particles[j].x;
             const dy = p.y - particles[j].y;
-
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < 120) {
-
-                ctx.strokeStyle =
-                    `rgba(255,136,0,${1 - distance / 120})`;
-
+                ctx.strokeStyle = `rgba(255,136,0,${1 - distance / 120})`;
                 ctx.lineWidth = 0.5;
-
                 ctx.beginPath();
                 ctx.moveTo(p.x, p.y);
                 ctx.lineTo(particles[j].x, particles[j].y);
                 ctx.stroke();
-
             }
-
         }
-
     });
 
     requestAnimationFrame(animateParticles);
-
 }
 
 window.addEventListener("resize", resizeCanvas);
-
 resizeCanvas();
 animateParticles();
 
 </script>
-
 </body>
 </html>
