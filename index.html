@@ -56,7 +56,8 @@ body {
 .games-button,
 .soundboard-button,
 .cloak-button,
-.browser-button {
+.browser-button,
+.apps-button {
     position: fixed;
     top: 20px;
     z-index: 5;
@@ -79,10 +80,16 @@ body {
     right: 25px;
 }
 
+.apps-button {
+    top: 75px;
+    right: 145px;
+}
+
 .games-button:hover,
 .soundboard-button:hover,
 .cloak-button:hover,
-.browser-button:hover {
+.browser-button:hover,
+.apps-button:hover {
     background: #ffad32;
 }
 
@@ -118,6 +125,7 @@ body {
 
 /* WINDOWS */
 .games-window,
+.apps-window,
 .soundboard-window,
 .cloak-window,
 .browser-window {
@@ -139,6 +147,7 @@ body {
 }
 
 .games-window.show,
+.apps-window.show,
 .soundboard-window.show,
 .cloak-window.show,
 .browser-window.show {
@@ -357,7 +366,7 @@ body {
     border-color: #ff8800;
 }
 
-/* GAME GRID */
+/* GAME AND APP GRID */
 .games-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -399,6 +408,7 @@ body {
 
 @media(max-width: 650px) {
     .games-window,
+    .apps-window,
     .soundboard-window,
     .browser-window {
         width: 95%;
@@ -450,6 +460,13 @@ body {
         padding: 9px 12px;
         font-size: 13px;
     }
+
+    .apps-button {
+        top: 110px;
+        right: 100px;
+        padding: 9px 12px;
+        font-size: 13px;
+    }
 }
 
 /* SMALL SCREEN BROWSER BAR */
@@ -481,6 +498,7 @@ body {
 <button class="soundboard-button" onclick="openSoundBoard()">🎵 SoundBoard</button>
 <button class="cloak-button" onclick="openCloak()">🥷 Cloak</button>
 <button class="browser-button" onclick="openBrowser()">🌐 Browser</button>
+<button class="apps-button" onclick="openApps()">📱 Apps</button>
 
 <!-- MAIN TITLE -->
 <div class="main-title">
@@ -501,6 +519,19 @@ body {
         placeholder="🔍 Search games..." oninput="searchGames()">
 
     <div class="games-grid" id="gamesGrid"></div>
+</div>
+
+<!-- APPS WINDOW -->
+<div class="apps-window" id="appsWindow">
+    <div class="window-header">
+        <h2>📱 Apps</h2>
+        <button class="close-button" onclick="closeApps()">&times;</button>
+    </div>
+
+    <input class="search" id="appsSearch" type="text"
+        placeholder="🔍 Search apps..." oninput="searchApps()">
+
+    <div class="games-grid" id="appsGrid"></div>
 </div>
 
 <!-- SOUNDBOARD WINDOW -->
@@ -613,41 +644,60 @@ const games = [
     {name:"Tomb Of The Mask",image:"/images/tombofthemask.png",url:"/gamewindow/tombofthemask/"},
     {name:"1v1.lol",image:"/images/1v1lol.png",url:"/gamewindow/1v1lol/"},
     {name:"Subway Surfers",image:"/images/subway-surfers-logo.png",url:"/gamewindow/subwaysurfers/"},
+
     {name:"Catac.io",image:"/images/catacio.png",url:"/gamewindow/catacio/"},
+
 ];
 
+/* APPS */
 
-/* DISPLAY GAMES */
+const apps = [
+    {
+        name: "Google",
+        image: "/images/google.png",
+        url: "/appwindow/google"
+    },
+];
 
-function displayGames(gameList) {
-    const grid = document.getElementById("gamesGrid");
+/* DISPLAY GAMES AND APPS */
+
+function displayCards(list, gridId, emptyMessage) {
+    const grid = document.getElementById(gridId);
     grid.innerHTML = "";
 
-    if (gameList.length === 0) {
-        grid.innerHTML = '<div class="no-games">No games found!</div>';
+    if (list.length === 0) {
+        grid.innerHTML = `<div class="no-games">${emptyMessage}</div>`;
         return;
     }
 
-    gameList.forEach(game => {
+    list.forEach(item => {
         const card = document.createElement("div");
         card.className = "game-card";
 
         const img = document.createElement("img");
-        img.src = game.image;
-        img.alt = game.name;
+        img.src = item.image;
+        img.alt = item.name;
 
         const title = document.createElement("h3");
-        title.textContent = game.name;
+        title.textContent = item.name;
 
         card.appendChild(img);
         card.appendChild(title);
 
         card.addEventListener("click", () => {
-            window.open(game.url, "_blank");
+            window.open(item.url, "_blank", "noopener,noreferrer");
         });
 
         grid.appendChild(card);
     });
+}
+
+function displayGames(gameList) {
+    displayCards(gameList, "gamesGrid", "No games found!");
+}
+
+function displayApps(appList) {
+    displayCards(appList, "appsGrid", "No apps found!");
 }
 
 /* SEARCH GAMES */
@@ -662,6 +712,18 @@ function searchGames() {
     displayGames(filteredGames);
 }
 
+/* SEARCH APPS */
+
+function searchApps() {
+    const search = document.getElementById("appsSearch").value.toLowerCase();
+
+    const filteredApps = apps.filter(app =>
+        app.name.toLowerCase().includes(search)
+    );
+
+    displayApps(filteredApps);
+}
+
 /* WINDOWS */
 
 function openGames() {
@@ -674,6 +736,18 @@ function openGames() {
 
 function closeGames() {
     document.getElementById("gamesWindow").classList.remove("show");
+}
+
+function openApps() {
+    closeWindows();
+    document.getElementById("appsWindow").classList.add("show");
+    document.getElementById("overlay").classList.add("show");
+    document.getElementById("appsSearch").value = "";
+    displayApps(apps);
+}
+
+function closeApps() {
+    document.getElementById("appsWindow").classList.remove("show");
 }
 
 function openSoundBoard() {
@@ -732,6 +806,7 @@ function loadBrowser() {
 
 function closeWindows() {
     closeGames();
+    closeApps();
     closeSoundBoard();
     closeCloak();
     closeBrowser();
@@ -813,9 +888,10 @@ document.addEventListener("keydown", function(event) {
     }
 });
 
-/* INITIALIZE GAMES */
+/* INITIALIZE */
 
 displayGames(games);
+displayApps(apps);
 
 /* LIVE CLOCK */
 
@@ -937,5 +1013,6 @@ resizeCanvas();
 animateParticles();
 
 </script>
+
 </body>
 </html>
