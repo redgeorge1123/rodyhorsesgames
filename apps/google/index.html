@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proxy</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #101014;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+/* LOADING SCREEN */
+#loadingScreen {
+    position: fixed;
+    inset: 0;
+    background: #101014;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+    transition: opacity 0.8s ease;
+}
+
+#loadingScreen.fade {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* PARTICLES */
+.particle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #ff7900;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #ff7900;
+    animation: float 6s infinite linear;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(110vh);
+        opacity: 0;
+    }
+    20% { opacity: 1; }
+    100% {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
+}
+
+/* LOADING TEXT */
+.loading-title {
+    font-size: 38px;
+    font-weight: bold;
+    color: #ff7900;
+    text-shadow: 0 0 15px #ff7900;
+    letter-spacing: 4px;
+    z-index: 2;
+}
+
+.loading-subtitle {
+    color: #aaa;
+    margin-top: 12px;
+    font-size: 13px;
+    letter-spacing: 3px;
+    z-index: 2;
+}
+
+/* LOADING BAR */
+.progress-container {
+    width: 260px;
+    height: 6px;
+    background: #292929;
+    border-radius: 20px;
+    margin-top: 30px;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #ff7900;
+    box-shadow: 0 0 15px #ff7900;
+    animation: loading 4s linear forwards;
+}
+
+@keyframes loading {
+    to { width: 100%; }
+}
+
+/* WEBSITE */
+#iframeContainer {
+    position: fixed;
+    inset: 0;
+    display: none;
+}
+
+#iframeContainer iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+
+    <div class="loading-title">LOADING PROXY</div>
+    <div class="loading-subtitle">PLEASE WAIT...</div>
+
+    <div class="progress-container">
+        <div class="progress-bar"></div>
+    </div>
+
+</div>
+
+<!-- EMBEDDED WEBSITE -->
+<div id="iframeContainer">
+    <iframe
+        id="siteFrame"
+        src="/apps/google/app.html"
+        allowfullscreen>
+    </iframe>
+</div>
+
+<script>
+
+// CREATE ORANGE PARTICLES
+for (let i = 0; i < 65; i++) {
+    let particle = document.createElement("div");
+
+    particle.className = "particle";
+
+    particle.style.left = Math.random() * 100 + "vw";
+    particle.style.animationDuration = (3 + Math.random() * 6) + "s";
+    particle.style.animationDelay = Math.random() * 5 + "s";
+
+    let size = 2 + Math.random() * 5;
+    particle.style.width = size + "px";
+    particle.style.height = size + "px";
+
+    document.getElementById("loadingScreen").appendChild(particle);
+}
+
+// SHOW WEBSITE AFTER LOADING
+setTimeout(() => {
+
+    document.getElementById("loadingScreen").classList.add("fade");
+
+    setTimeout(() => {
+        document.getElementById("loadingScreen").style.display = "none";
+        document.getElementById("iframeContainer").style.display = "block";
+    }, 800);
+
+}, 4000);
+
+</script>
+
+</body>
+</html>
